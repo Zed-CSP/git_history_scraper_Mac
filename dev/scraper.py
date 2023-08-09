@@ -8,9 +8,10 @@ def get_mtime(file_path):
     file_stat = os.stat(file_path)
     return time.ctime(file_stat.st_mtime)
 
+
 def list_files_with_mtime(directory):
     """
-    List all files in a directory with their last modified time.
+    List all files in a directory with their last modified time. **Quick and Dirty!** Will resolve nested forloops later.
     """
     for foldername, subfolders, filenames in os.walk(directory):
         for filename in filenames:

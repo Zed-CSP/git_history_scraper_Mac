@@ -11,13 +11,11 @@ def get_mtime(file_path):
 
 def list_files_with_mtime(directory):
     """
-    List all files in a directory with their last modified time. **Quick and Dirty!** Will resolve nested forloops later.
+    List all files in a directory with their last modified time.
     """
-    for foldername, subfolders, filenames in os.walk(directory):
-        for filename in filenames:
-            full_path = os.path.join(foldername, filename)
+    for item in os.listdir(directory):
+        full_path = os.path.join(directory, item)
+        if os.path.isdir(full_path):
+            list_files_with_mtime(full_path)
+        else:
             print(f"{full_path}: Last modified on {get_mtime(full_path)}")
-
-if __name__ == "__main__":
-    dir_path = input("Enter the path of the directory: ")
-    list_files_with_mtime(dir_path)

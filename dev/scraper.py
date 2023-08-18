@@ -1,5 +1,6 @@
 import os
 import time
+import hashlib
 
 def get_mtime(file_path):
     """
@@ -8,16 +9,23 @@ def get_mtime(file_path):
     file_stat = os.stat(file_path)
     return time.ctime(file_stat.st_mtime)
 
+def obscure(data):
+    """
+    Return a SHA256 hash of the data.
+    """
+    return hashlib.sha256(data.encode()).hexdigest()
+
 def generate_commit_history(directory):
     """
-    Generate a text git commit history based on file mtime.
+    Generate a mock git commit history based on file mtime.
     """
     history = []
     for foldername, subfolders, filenames in os.walk(directory):
         for filename in filenames:
             full_path = os.path.join(foldername, filename)
+            obscured_path = obscure(full_path)
             mtime = get_mtime(full_path)
-            history.append(f"commit {hash(full_path)}\nDate:   {mtime}\n\n    Modified: {full_path}\n\n")
+            history.append(f"commit {hash(full_path)}\nDate:   {mtime}\n\n    Modified: {obscured_path}\n\n")
     return "\n".join(history)
 
 def save_to_file(data, output_file):
